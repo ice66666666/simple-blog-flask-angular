@@ -1,11 +1,11 @@
-from app import db
+from database import db
 from datetime import datetime
 
 class Post(db.Model):
-    __tablaname__ = 'posts'
+    __tablename__ = 'posts'
 
     #campos de las tablas
-    id = db.Column(db.Interger, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200), nullable=False)
     content = db.Column(db.Text, nullable=False)
 
@@ -25,7 +25,7 @@ class Post(db.Model):
             'title': self.title,
             'content': self.content,
             'author_id': self.author_id,
-            'author': self.author.username if self.author else None,  # Nombre del autor
+            'author': f'Usuario {self.author_id}',  # Nombre temporal del autor
             'created_at': self.created_at.isoformat(),
             'updated_at': self.updated_at.isoformat()
         }

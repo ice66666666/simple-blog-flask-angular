@@ -1,6 +1,4 @@
 from marshmallow import Schema, fields, validate, validates_schema, ValidationError
-from app import db
-from models.user import User
 
 
 class UserSchema(Schema): #es para validar los datos que se envian al servidor de un usuario
@@ -26,6 +24,8 @@ class UserSchema(Schema): #es para validar los datos que se envian al servidor d
     @validates_schema
     def validate_email_unique(self, data, **kwargs):
         if 'email' in data:
+            # Importar User aquí para evitar consultas en tiempo de importación del módulo
+            from models.user import User
             existing_user = User.query.filter_by(email=data['email']).first()
             if existing_user:
                 raise ValidationError('Email ya está en uso', 'email')
@@ -34,6 +34,7 @@ class UserSchema(Schema): #es para validar los datos que se envian al servidor d
     @validates_schema
     def validate_username_unique(self, data, **kwargs):
         if 'username' in data:
+            from models.user import User
             existing_user = User.query.filter_by(username=data['username']).first()
             if existing_user:
                 raise ValidationError('Username ya está en uso', 'username')
